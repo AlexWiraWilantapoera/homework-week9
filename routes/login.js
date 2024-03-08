@@ -62,16 +62,23 @@ router.post("/", (req, res) => {
   if (!req.body.email || !req.body.password) {
     res.send({ message: "Bad Request" });
   }
-  const token = jwt.sign(
-    {
-      emali: req.body.email,
-      password: req.body.password,
-    },
-    "koderahasia",
-    { expiresIn: "1h" }
-  );
-  res.json({
-    token: token,
+  pool.query(`select * from users where email = '${req.body.email}' and password = '${req.body.password}'`, (error, result) => {
+    console.log(req.body);
+    if (result.rows[0].email != req.body.email && result.rows[0].password != req.body.password) {
+      res.status(400).json({ message: "Email or Password is invalid" });
+    } else {
+      const token = jwt.sign(
+        {
+          emali: req.body.email,
+          password: req.body.password,
+        },
+        "koderahasia",
+        { expiresIn: "1h" }
+      );
+      res.json({
+        token: token,
+      });
+    }
   });
 });
 
