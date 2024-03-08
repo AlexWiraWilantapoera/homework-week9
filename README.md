@@ -1,6 +1,6 @@
 # Movie Test
 
-#### Topic
+## Topic
 - Implementing the concept of authentication & authorization for `login`.
 - Apply authorization to access certain features.
 - Implement queries to perform GET, POST, PUT, DELETE.
@@ -8,7 +8,7 @@
 - Implemented Swagger for API documentation.
 - Implemented Morgan to record logs.
 
-#### Requirement
+## Requirement
 - [NodeJS](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs) - Node.js is an open-source and cross-platform JavaScript runtime environment.
 - [Express](https://expressjs.com/en/5x/api.html) - Express is a minimal and flexible Node.js web application framework.
 - [PostgreSQL](https://www.postgresql.org/) - PostgreSQL is a powerful, open source object-relational database system.
@@ -16,7 +16,7 @@
 - [Swagger]() - Swagger tools to generate and maintain API docs, ensuring the documentation stays up-to-date as the API evolves.
 - [VisualStudioCode]() - Visual Studio Code is a lightweight but powerful source code editor which available for Windows, macOS and Linux.
 
-#### Getting Started
+## Getting Started
 
 - Before run the project please install the dependecies first.
 
@@ -31,8 +31,8 @@ npm run start
 ```
 - To see if it works properly hit http://localhost:3000/things
 
-#### API test using Postman
+## API test using Postman
 - open http://localhost:3000/things in postman select `GET` and send it.
 
-#### API Documetation
+## API Documetation
 - https://documenter.getpostman.com/view/33182870/2sA2xfaEfS
