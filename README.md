@@ -29,10 +29,10 @@ npm install
 ```sh
 npm run start
 ```
-- To see if it works properly hit http://localhost:3000/things
+- To see if it works properly hit http://localhost:3000
 
 ## API test using Postman
-- open http://localhost:3000/things in postman select `GET` and send it.
+- open http://localhost:3000 in postman.
 
 ## API Documetation
 - https://documenter.getpostman.com/view/33182870/2sA2xfaEfS
