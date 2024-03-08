@@ -41,6 +41,8 @@ app.use("/users/update/:id", users);
 
 app.use("/movies", movies);
 
+app.use("/movies/create", movies);
+
 app.use("/movies/delete/:id", movies);
 
 app.use("/movies/update/:id", movies);
