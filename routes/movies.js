@@ -138,6 +138,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/create", (req, res) => {
+  const data = jwt.verify(req.body.token, "koderahasia");
   if (!req.body.id || !req.body.title || !req.body.genres || !req.body.year) {
     res.status(400);
     res.json({ message: "Bad Request" });
@@ -146,30 +147,32 @@ router.post("/create", (req, res) => {
       if (error) {
         throw error;
       }
-      res.send({ message: "New Movie Created" });
+      res.send({ message: "New Movie Created by User:", user: data });
     });
   }
 });
 
 router.delete("/delete/:id", (req, res) => {
+  const data = jwt.verify(req.body.token, "koderahasia");
   pool.query(`delete from movies where id = ${req.params.id}`, (error, result) => {
     if (error) {
       throw error;
     }
-    res.json({ message: `Delete Success id: ${req.params.id}` });
+    res.json({ message: `Delete Success id: ${req.params.id}`, user: data });
   });
 });
 
 router.put("/update/:id", (req, res) => {
+  const data = jwt.verify(req.body.token, "koderahasia");
   if (!req.body.title) {
     res.status(400);
     res.json({ message: "Bad Request" });
   }
-  pool.query(`update movies set email = '${req.body.title}' where id = ${req.params.id}`, (error, result) => {
+  pool.query(`update movies set title = '${req.body.title}' where id = ${req.params.id}`, (error, result) => {
     if (error) {
       throw error;
     }
-    res.json({ message: `Update Success id: ${req.params.id}` });
+    res.json({ message: `Update Success id: ${req.params.id}`, user: data });
   });
 });
 

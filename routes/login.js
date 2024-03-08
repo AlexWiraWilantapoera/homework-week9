@@ -68,7 +68,7 @@ router.post("/", (req, res) => {
       password: req.body.password,
     },
     "koderahasia",
-    { expiresIn: "30s" }
+    { expiresIn: "1h" }
   );
   res.json({
     token: token,
