@@ -1,4 +1,4 @@
-# Movie Test
+# User-Movie Test
 
 ## Topic
 - Implementing the concept of authentication & authorization for `login`.
