@@ -124,6 +124,9 @@ router.use(bodyParser.urlencoded({ extended: true }));
 let page, limit, offset;
 
 router.get("/", (req, res) => {
+  if (!req.body.token) {
+    res.status(400).send({ message: "Bad Request" });
+  }
   const data = jwt.verify(req.body.token, "koderahasia");
   page = parseInt(req.query.page);
   limit = parseInt(req.query.limit);
@@ -138,6 +141,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/create", (req, res) => {
+  if (!req.body.token) {
+    res.status(400).send({ message: "Bad Request" });
+  }
   const data = jwt.verify(req.body.token, "koderahasia");
   if (!req.body.id || !req.body.title || !req.body.genres || !req.body.year) {
     res.status(400);
@@ -153,6 +159,9 @@ router.post("/create", (req, res) => {
 });
 
 router.delete("/delete/:id", (req, res) => {
+  if (!req.body.token) {
+    res.status(400).send({ message: "Bad Request" });
+  }
   const data = jwt.verify(req.body.token, "koderahasia");
   pool.query(`delete from movies where id = ${req.params.id}`, (error, result) => {
     if (error) {
@@ -163,6 +172,9 @@ router.delete("/delete/:id", (req, res) => {
 });
 
 router.put("/update/:id", (req, res) => {
+  if (!req.body.token) {
+    res.status(400).send({ message: "Bad Request" });
+  }
   const data = jwt.verify(req.body.token, "koderahasia");
   if (!req.body.title) {
     res.status(400);

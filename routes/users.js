@@ -126,6 +126,9 @@ router.use(bodyParser.urlencoded({ extended: true }));
 let page, limit, offset;
 
 router.get("/", (req, res) => {
+  if (!req.body.token) {
+    res.status(400).send({ message: "Bad Request" });
+  }
   const data = jwt.verify(req.body.token, "koderahasia");
   page = parseInt(req.query.page);
   limit = parseInt(req.query.limit);
