@@ -129,17 +129,31 @@ router.get("/", (req, res) => {
   if (!req.body.token) {
     res.status(400).send({ message: "Bad Request" });
   }
-  const data = jwt.verify(req.body.token, "koderahasia");
-  page = parseInt(req.query.page);
-  limit = parseInt(req.query.limit);
-  offset = (page - 1) * limit;
-  pool.query(`select * from users order by id asc offset ${offset} limit ${limit}`, (error, result) => {
-    if (error) {
-      throw error;
+  try {
+    const data = jwt.verify(req.body.token, "koderahasia");
+    const role = data.role;
+    if (role == "Programmer") {
+      page = parseInt(req.query.page);
+      limit = parseInt(req.query.limit);
+      offset = (page - 1) * limit;
+      pool.query(`select * from users order by id asc offset ${offset} limit ${limit}`, (error, result) => {
+        if (error) {
+          throw error;
+        }
+        const users = result.rows;
+        res.json({ user: data, users: users });
+      });
+    } else {
+      res.status(403).json({ message: "unauthorized" });
     }
-    const users = result.rows;
-    res.json({ user: data, users: users });
-  });
+  } catch (error) {
+    console.log(error);
+    if (error.name == "JsonWebTokenError") {
+      res.status(500).json({ message: "jwt error" });
+    } else {
+      res.status(500).json({ message: "internal server error" });
+    }
+  }
 });
 
 router.post("/register", (req, res) => {

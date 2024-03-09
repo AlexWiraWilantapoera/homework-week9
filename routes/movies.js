@@ -158,17 +158,31 @@ router.post("/create", (req, res) => {
   if (!req.body.token) {
     res.status(400).send({ message: "Bad Request" });
   }
-  const data = jwt.verify(req.body.token, "koderahasia");
-  if (!req.body.id || !req.body.title || !req.body.genres || !req.body.year) {
-    res.status(400);
-    res.json({ message: "Bad Request" });
-  } else {
-    pool.query(`insert into movies (id, title, genres, year) values (${req.body.id}, '${req.body.title}', '${req.body.genres}', '${req.body.year}')`, (error, result) => {
-      if (error) {
-        throw error;
+  try {
+    const data = jwt.verify(req.body.token, "koderahasia");
+    const role = data.role;
+    if (role == "Programmer") {
+      if (!req.body.id || !req.body.title || !req.body.genres || !req.body.year) {
+        res.status(400);
+        res.json({ message: "Bad Request" });
+      } else {
+        pool.query(`insert into movies (id, title, genres, year) values (${req.body.id}, '${req.body.title}', '${req.body.genres}', '${req.body.year}')`, (error, result) => {
+          if (error) {
+            throw error;
+          }
+          res.send({ message: "New Movie Created by User:", user: data });
+        });
       }
-      res.send({ message: "New Movie Created by User:", user: data });
-    });
+    } else {
+      res.status(403).json({ message: "unauthorized" });
+    }
+  } catch (error) {
+    console.log(error);
+    if (error.name == "JsonWebTokenError") {
+      res.status(500).json({ message: "jwt error" });
+    } else {
+      res.status(500).json({ message: "internal server error" });
+    }
   }
 });
 
@@ -176,30 +190,58 @@ router.delete("/delete/:id", (req, res) => {
   if (!req.body.token) {
     res.status(400).send({ message: "Bad Request" });
   }
-  const data = jwt.verify(req.body.token, "koderahasia");
-  pool.query(`delete from movies where id = ${req.params.id}`, (error, result) => {
-    if (error) {
-      throw error;
+  try {
+    const data = jwt.verify(req.body.token, "koderahasia");
+    const role = data.role;
+    if (role == "Programmer") {
+      pool.query(`delete from movies where id = ${req.params.id}`, (error, result) => {
+        if (error) {
+          throw error;
+        }
+        res.json({ message: `Delete Success id: ${req.params.id}`, user: data });
+      });
+    } else {
+      res.status(403).json({ message: "unauthorized" });
     }
-    res.json({ message: `Delete Success id: ${req.params.id}`, user: data });
-  });
+  } catch (error) {
+    console.log(error);
+    if (error.name == "JsonWebTokenError") {
+      res.status(500).json({ message: "jwt error" });
+    } else {
+      res.status(500).json({ message: "internal server error" });
+    }
+  }
 });
 
 router.put("/update/:id", (req, res) => {
   if (!req.body.token) {
     res.status(400).send({ message: "Bad Request" });
   }
-  const data = jwt.verify(req.body.token, "koderahasia");
-  if (!req.body.title) {
-    res.status(400);
-    res.json({ message: "Bad Request" });
-  }
-  pool.query(`update movies set title = '${req.body.title}' where id = ${req.params.id}`, (error, result) => {
-    if (error) {
-      throw error;
+  try {
+    const data = jwt.verify(req.body.token, "koderahasia");
+    const role = data.role;
+    if (role == "Programmer") {
+      if (!req.body.title) {
+        res.status(400);
+        res.json({ message: "Bad Request" });
+      }
+      pool.query(`update movies set title = '${req.body.title}' where id = ${req.params.id}`, (error, result) => {
+        if (error) {
+          throw error;
+        }
+        res.json({ message: `Update Success id: ${req.params.id}`, user: data });
+      });
+    } else {
+      res.status(403).json({ message: "unauthorized" });
     }
-    res.json({ message: `Update Success id: ${req.params.id}`, user: data });
-  });
+  } catch (error) {
+    console.log(error);
+    if (error.name == "JsonWebTokenError") {
+      res.status(500).json({ message: "jwt error" });
+    } else {
+      res.status(500).json({ message: "internal server error" });
+    }
+  }
 });
 
 module.exports = router;
